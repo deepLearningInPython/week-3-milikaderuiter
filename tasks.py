@@ -12,11 +12,11 @@ import numpy as np
 # The output length can be computed as follows:
 # (input_length - kernel_length + 1)
 
-# Your code here:
-# -----------------------------------------------
-
 def compute_output_size_1d(input_array, kernel_array):
-    pass
+    input_length = len(input_array)
+    kernel_length = len(kernel_array)
+    output_size = input_length - kernel_length + 1 
+    return output_size
 
 
 # -----------------------------------------------
@@ -31,13 +31,18 @@ print(compute_output_size_1d(input_array, kernel_array))
 # Write a function that takes a one-dimensional numpy array (input_array) and a one-dimensional kernel array (kernel_array)
 # and returns their convolution (no padding, stride 1).
 
-# Your code here:
-# -----------------------------------------------
-
 def convolve_1d(input_array, kernel_array):
-    # Tip: start by initializing an empty output array (you can use your function above to calculate the correct size).
-    # Then fill the cells in the array with a loop.
-    pass
+    input_length = len(input_array)
+    kernel_length = len(kernel_array)
+    output_size = input_length - kernel_length + 1
+    output = np.zeros(output_size)
+    for i in range(output_size):
+        input_slice = input_array[i : i + kernel_length]
+        result = (input_slice * kernel_array).sum()
+        output[i] = result
+    return output
+
+    
 
 # -----------------------------------------------
 # Another tip: write test cases like this, so you can easily test your function.
@@ -52,11 +57,13 @@ print(convolve_1d(input_array, kernel_array))
 # The dimensions of the output (assuming no padding and a stride of one) can be computed as follows:
 # (input_height - kernel_height + 1, input_width - kernel_width + 1)
 
-# Your code here:
-# -----------------------------------------------
-
 def compute_output_size_2d(input_matrix, kernel_matrix):
-    pass
+    input_height = input_matrix.shape[0]
+    kernel_height = kernel_matrix.shape[0]
+    input_width = input_matrix.shape[1]
+    kernel_width = kernel_matrix.shape[1]
+    dim = (input_height - kernel_height + 1, input_width - kernel_width + 1)
+    return dim
 
 
 # -----------------------------------------------
@@ -67,12 +74,21 @@ def compute_output_size_2d(input_matrix, kernel_matrix):
 # Write a function that computes the convolution (no padding, stride 1) of two matrices (input_matrix, kernel_matrix).
 # Your function will likely use lots of looping and you can reuse the functions you made above.
 
-# Your code here:
-# -----------------------------------------------
 def convolute_2d(input_matrix, kernel_matrix):
-    # Tip: same tips as above, but you might need a nested loop here in order to
-    # define which parts of the input matrix need to be multiplied with the kernel matrix.
-    pass
+    H_in, W_in = input_matrix.shape
+    H_k, W_k = kernel_matrix.shape
+    
+    H_out = H_in - H_k + 1
+    W_out = W_in - W_k + 1
 
+    output = np.zeros((H_out, W_out))
 
-# -----------------------------------------------
+    for i in range(H_out):
+        for j in range(W_out):
+            input_patch = input_matrix[i : i + H_k, j : j + W_k]
+
+            # TODO: multiply input_patch with kernel and sum
+            result = (input_patch * kernel_matrix).sum()
+            output[i, j] = result
+
+    return output
